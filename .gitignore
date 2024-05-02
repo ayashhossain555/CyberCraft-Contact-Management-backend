@@ -40,3 +40,4 @@ Thumbs.db
 # Lock files (optional, depends on preference)
 # package-lock.json
 # yarn.lock
+.vercel

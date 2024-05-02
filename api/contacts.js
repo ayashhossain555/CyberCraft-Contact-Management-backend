@@ -1,13 +1,22 @@
 const express = require('express');
 const serverless = require('serverless-http');
-const Contact = require('../models/Contact');
-const { createContactPDF, createAllContactsPDF } = require('../utilities/pdfGenerator');
-const sendEmail = require('../utilities/mailer');
+const Contact = require('./models/Contact');
+require('dotenv').config();
+const { createContactPDF, createAllContactsPDF } = require('./utilities/pdfGenerator');
+const sendEmail = require('./utilities/mailer');
+const mongoose = require('mongoose');
 
 const app = express();
 app.use(express.json());
 
+// MongoDB Connection Setup
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log("MongoDB connected successfully"))
+  .catch(err => console.log("MongoDB connection error:", err));
 
+// Endpoint to download all contacts as PDF
 app.get('/api/contacts/download', async (req, res) => {
   try {
     const contacts = await Contact.find({});
@@ -21,9 +30,9 @@ app.get('/api/contacts/download', async (req, res) => {
             }
         });
     });
-} catch (error) {
-        res.status(500).json({ message: 'Failed to generate PDF: ' + error.message });
-    }
+  } catch (error) {
+    res.status(500).json({ message: 'Failed to generate PDF: ' + error.message });
+  }
 });
 
 // Get all contacts
@@ -49,8 +58,8 @@ app.post('/api/contacts', async (req, res) => {
     const newContact = await contact.save();
     createContactPDF(newContact, (pdfPath) => {
         sendEmail({
-            from: 'ayash.hossain.chowdhury@gmail.com',
-            to: 'test@nusaiba.com.bd',
+            from: 'your-email@gmail.com',
+            to: 'recipient-email@example.com',
             subject: 'New Contact Submission',
             text: 'Please find attached the PDF of the new contact submission.',
             attachments: [{ path: pdfPath }]
@@ -73,9 +82,9 @@ app.put('/api/contacts/:id', async (req, res) => {
     createContactPDF(updatedContact, (pdfPath) => {
         sendEmail({
             from: 'your-email@gmail.com',
-            to: 'test@nusaiba.com.bd',
+            to: 'recipient-email@example.com',
             subject: 'Updated Contact Submission',
-            text: 'Please find attached the PDF of the new contact submission.',
+            text: 'Please find attached the PDF of the updated contact submission.',
             attachments: [{ path: pdfPath }]
           });
         res.json({ contact: updatedContact, pdfPath });
