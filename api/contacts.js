@@ -18,9 +18,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 }).then(() => console.log("MongoDB connected successfully"))
   .catch(err => console.log("MongoDB connection error:", err));
 
-app.use(cors({
-  origin: 'https://cybercraft-contact-management.web.app/'  // Specify the origin of your front-end app
-}));
+app.use(cors());
 
 // Endpoint to download all contacts as PDF
 app.get('/api/contacts/download', async (req, res) => {
