@@ -1,0 +1,8 @@
+[build]
+command = "netlify-lambda build src/functions"
+functions = "src/functions"
+
+[[redirects]]
+from = "/*"
+to = "/.netlify/functions/lambda"  # Assuming 'lambda' is your serverless function entry point
+status = 200
