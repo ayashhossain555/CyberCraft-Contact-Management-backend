@@ -1,6 +1,7 @@
 const express = require('express');
 const serverless = require('serverless-http');
 const Contact = require('./models/Contact');
+const cors = require('cors');
 require('dotenv').config();
 const { createContactPDF, createAllContactsPDF } = require('./utilities/pdfGenerator');
 const sendEmail = require('./utilities/mailer');
@@ -8,6 +9,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 // MongoDB Connection Setup
 mongoose.connect(process.env.MONGODB_URI, {
@@ -15,6 +17,10 @@ mongoose.connect(process.env.MONGODB_URI, {
   useUnifiedTopology: true
 }).then(() => console.log("MongoDB connected successfully"))
   .catch(err => console.log("MongoDB connection error:", err));
+
+app.use(cors({
+  origin: 'https://cybercraft-contact-management.web.app/'  // Specify the origin of your front-end app
+}));
 
 // Endpoint to download all contacts as PDF
 app.get('/api/contacts/download', async (req, res) => {
