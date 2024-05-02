@@ -18,10 +18,6 @@ mongoose.connect(process.env.MONGODB_URI, {
 }).then(() => console.log("MongoDB connected successfully"))
   .catch(err => console.log("MongoDB connection error:", err));
 
-app.use(cors({
-  origin: 'http://localhost:5173'  // Specify the origin of your front-end app
-}));
-
 // Endpoint to download all contacts as PDF
 app.get('/api/contacts/download', async (req, res) => {
   try {
