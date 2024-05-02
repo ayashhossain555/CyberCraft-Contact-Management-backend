@@ -1,3 +1,42 @@
-node_modules
+# Dependency directories
+node_modules/
+jspm_packages/
 
-functions
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Production
+/build
+/dist
+
+# Misc
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*.tmp
+*.temp
+
+# Output directories (optional)
+/output
+/public
+
+# Compiled files
+*.compiled
+*.min.js
+*.min.css
+
+# Lock files (optional, depends on preference)
+# package-lock.json
+# yarn.lock
